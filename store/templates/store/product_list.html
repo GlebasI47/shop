@@ -8,7 +8,7 @@
     <h1>Каталог товаров</h1>
     <ul>
         {% for product in products %}
-            <li>{{ product.name }} — {{ product.price }} руб. ({{ product.category.name }})</li>
+            <li><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a> — {{ product.price }} руб. ({{ product.category.name }})</li>
         {% endfor %}
     </ul>
 </body>
