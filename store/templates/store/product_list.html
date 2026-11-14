@@ -8,6 +8,7 @@
     <p>
         {% if user.is_authenticated %}
             Привет, {{ user.username }}!
+                <a href="{% url 'cart' %}">Корзина</a>
             <form method="post" action="{% url 'logout' %}" style="display:inline">
                 {% csrf_token %}
                 <button type="submit">Выйти</button>

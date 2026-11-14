@@ -35,3 +35,11 @@ def add_to_cart(request, product_id):
         item.quantity += 1
         item.save()
     return redirect("product_detail", product_id=product.id)
+
+@login_required
+def cart_view(request):
+    items = CartItem.objects.filter(user=request.user)
+    total = 0
+    for item in items:
+        total = total + item.total_price()
+    return render(request, "store/cart.html", {"items": items, "total": total})
