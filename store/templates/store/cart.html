@@ -9,7 +9,13 @@
     {% if items %}
         <ul>
             {% for item in items %}
-                <li>{{ item.product.name }} — {{ item.quantity }} шт. × {{ item.product.price }} = {{ item.total_price }} руб.</li>
+                                <li>
+                    {{ item.product.name }} — {{ item.quantity }} шт. × {{ item.product.price }} = {{ item.total_price }} руб.
+                    <form method="post" action="{% url 'remove_from_cart' item.id %}" style="display:inline">
+                        {% csrf_token %}
+                        <button type="submit">Удалить</button>
+                    </form>
+                </li>
             {% endfor %}
         </ul>
         <p><b>Итого: {{ total }} руб.</b></p>
