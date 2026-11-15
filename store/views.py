@@ -76,4 +76,9 @@ def checkout(request):
         order.save()
         items.delete()
 
-    return redirect("cart")
+    return redirect("orders")
+
+@login_required
+def orders_view(request):
+    orders = Order.objects.filter(user=request.user).order_by("-created_at")
+    return render(request, "store/orders.html", {"orders": orders})
