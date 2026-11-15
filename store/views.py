@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Product, CartItem
+from .models import Product, CartItem, Order, OrderItem
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.db import transaction
 
 
 def product_list(request):
@@ -49,4 +50,30 @@ def cart_view(request):
 def remove_from_cart(request, item_id):
     item = get_object_or_404(CartItem, id=item_id, user=request.user)
     item.delete()
+    return redirect("cart")
+
+@login_required
+@require_POST
+def checkout(request):
+    items = CartItem.objects.filter(user=request.user)
+    if not items:
+        return render(request, "store/cart.html",
+                      {"items": items, "total": 0, "error": "Корзина пуста, нечего оформлять."},
+                      status=400)
+
+    with transaction.atomic():
+        order = Order.objects.create(user=request.user)
+        total = 0
+        for item in items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.price,
+            )
+            total = total + item.total_price()
+        order.total = total
+        order.save()
+        items.delete()
+
     return redirect("cart")

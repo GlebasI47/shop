@@ -6,6 +6,9 @@
 </head>
 <body>
     <h1>Корзина</h1>
+        {% if error %}
+        <p style="color:red">{{ error }}</p>
+    {% endif %}
     {% if items %}
         <ul>
             {% for item in items %}
@@ -19,6 +22,10 @@
             {% endfor %}
         </ul>
         <p><b>Итого: {{ total }} руб.</b></p>
+            <form method="post" action="{% url 'checkout' %}">
+            {% csrf_token %}
+            <button type="submit">Оформить заказ</button>
+        </form>
     {% else %}
         <p>Корзина пуста.</p>
     {% endif %}
