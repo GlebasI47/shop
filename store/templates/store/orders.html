@@ -1,22 +1,24 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Мои заказы</title>
-</head>
-<body>
-    <h1>Мои заказы</h1>
+{% extends "base.html" %}
+
+{% block title %}Мои заказы{% endblock %}
+
+{% block content %}
+    <h1 class="page-title">Мои заказы</h1>
     {% for order in orders %}
-        <h3>Заказ №{{ order.id }} от {{ order.created_at|date:"d.m.Y H:i" }}</h3>
-        <ul>
+        <div class="panel order">
+            <div class="order__head">
+                <b>Заказ №{{ order.id }}</b>
+                <span class="muted">{{ order.created_at|date:"d.m.Y H:i" }}</span>
+            </div>
             {% for item in order.items.all %}
-                <li>{{ item.product.name }} — {{ item.quantity }} шт. × {{ item.price }} руб.</li>
+                <div class="order__line">
+                    <span>{{ item.product.name }}</span>
+                    <span class="muted">{{ item.quantity }} шт. × {{ item.price }} руб.</span>
+                </div>
             {% endfor %}
-        </ul>
-        <p><b>Сумма: {{ order.total }} руб.</b></p>
+            <div class="order__total">Сумма: <b>{{ order.total }} руб.</b></div>
+        </div>
     {% empty %}
-        <p>Заказов пока нет.</p>
+        <p class="empty">Заказов пока нет. <a href="{% url 'product_list' %}">Перейти в каталог</a></p>
     {% endfor %}
-    <p><a href="{% url 'product_list' %}">← В каталог</a></p>
-</body>
-</html>
+{% endblock %}

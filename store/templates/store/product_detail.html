@@ -1,24 +1,33 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ product.name }}</title>
-</head>
-<body>
-    <h1>    {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300">
-    {% endif %}{{ product.name }}</h1>
-    <p>Категория: {{ product.category.name }}</p>
-    <p>Цена: {{ product.price }} руб.</p>
-    <p>{{ product.description }}</p>
-        {% if user.is_authenticated %}
-        <form method="post" action="{% url 'add_to_cart' product.id %}">
-            {% csrf_token %}
-            <button type="submit">В корзину</button>
-        </form>
-    {% else %}
-        <p><a href="{% url 'login' %}">Войдите</a>, чтобы добавить в корзину.</p>
-    {% endif %}
-    <p><a href="{% url 'product_list' %}">← Назад в каталог</a></p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+    <a href="{% url 'product_list' %}" class="back">← Назад в каталог</a>
+    <div class="detail">
+        <div class="detail__image">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <div class="no-image">Нет фото</div>
+            {% endif %}
+        </div>
+        <div class="detail__info">
+            <span class="badge">{{ product.category.name }}</span>
+            <h1>{{ product.name }}</h1>
+            <p class="price price--big">{{ product.price }} руб.</p>
+            {% if product.description %}
+                <p class="detail__description">{{ product.description }}</p>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'add_to_cart' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn--big">В корзину</button>
+                </form>
+            {% else %}
+                <p class="hint"><a href="{% url 'login' %}">Войдите</a>, чтобы добавить товар в корзину.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

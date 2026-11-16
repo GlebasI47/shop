@@ -1,34 +1,43 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Корзина</title>
-</head>
-<body>
-    <h1>Корзина</h1>
-        {% if error %}
-        <p style="color:red">{{ error }}</p>
+{% extends "base.html" %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+    <h1 class="page-title">Корзина</h1>
+
+    {% if error %}
+        <p class="alert">{{ error }}</p>
     {% endif %}
+
     {% if items %}
-        <ul>
+        <div class="panel">
             {% for item in items %}
-                                <li>
-                    {{ item.product.name }} — {{ item.quantity }} шт. × {{ item.product.price }} = {{ item.total_price }} руб.
-                    <form method="post" action="{% url 'remove_from_cart' item.id %}" style="display:inline">
+                <div class="row">
+                    <div class="row__image">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                        {% endif %}
+                    </div>
+                    <div class="row__name">
+                        <a href="{% url 'product_detail' item.product.id %}">{{ item.product.name }}</a>
+                        <span class="muted">{{ item.quantity }} шт. × {{ item.product.price }} руб.</span>
+                    </div>
+                    <div class="row__sum">{{ item.total_price }} руб.</div>
+                    <form method="post" action="{% url 'remove_from_cart' item.id %}">
                         {% csrf_token %}
-                        <button type="submit">Удалить</button>
+                        <button type="submit" class="btn btn--ghost btn--small">Удалить</button>
                     </form>
-                </li>
+                </div>
             {% endfor %}
-        </ul>
-        <p><b>Итого: {{ total }} руб.</b></p>
-            <form method="post" action="{% url 'checkout' %}">
-            {% csrf_token %}
-            <button type="submit">Оформить заказ</button>
-        </form>
+            <div class="total">
+                <span>Итого: <b>{{ total }} руб.</b></span>
+                <form method="post" action="{% url 'checkout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn--big">Оформить заказ</button>
+                </form>
+            </div>
+        </div>
     {% else %}
-        <p>Корзина пуста.</p>
+        <p class="empty">Корзина пуста. <a href="{% url 'product_list' %}">Перейти в каталог</a></p>
     {% endif %}
-    <p><a href="{% url 'product_list' %}">← В каталог</a></p>
-</body>
-</html>
+{% endblock %}
