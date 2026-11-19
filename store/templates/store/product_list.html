@@ -8,7 +8,7 @@
             <div class="hero__text">
                 <span class="hero__label">Новый сезон техники</span>
                 <h1 class="hero__title">Техника, которая<br>радует каждый день</h1>
-                <p class="hero__subtitle">Смартфоны, ноутбуки и наушники от популярных брендов. Оформление заказа — за минуту.</p>
+                <p class="hero__subtitle">Смартфоны, ноутбуки, планшеты, часы и аудиотехника от популярных брендов. Оформление заказа — за минуту.</p>
                 <a href="#catalog" class="btn btn--big btn--white">Смотреть каталог</a>
             </div>
             <div class="hero__icons" aria-hidden="true">
@@ -26,7 +26,7 @@
             <a href="?category={{ category.id }}"
                class="tile {% if selected_category == category.id|stringformat:'s' %}tile--active{% endif %}">
                 <span class="tile__icon">
-                    {% if "елефон" in category.name or "мартфон" in category.name %}📱{% elif "оутбук" in category.name %}💻{% elif "аушник" in category.name %}🎧{% else %}📦{% endif %}
+                    {% if "елефон" in category.name or "мартфон" in category.name %}📱{% elif "оутбук" in category.name %}💻{% elif "аушник" in category.name %}🎧{% elif "ланшет" in category.name %}📲{% elif "асы" in category.name %}⌚{% elif "олонк" in category.name %}🔊{% else %}📦{% endif %}
                 </span>
                 <span class="tile__name">{{ category.name }}</span>
             </a>
