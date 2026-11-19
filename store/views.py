@@ -119,3 +119,14 @@ def cart_decrease(request, item_id):
     else:
         item.delete()
     return redirect("cart")
+
+def help_view(request):
+    return render(request, "store/help.html")
+
+
+def delivery_view(request):
+    return render(request, "store/delivery.html")
+
+
+def contacts_view(request):
+    return render(request, "store/contacts.html")

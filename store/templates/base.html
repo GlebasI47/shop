@@ -13,6 +13,7 @@
             <a href="{% url 'product_list' %}" class="logo">Tech<span>Shop</span></a>
             <nav class="nav">
                 <a href="{% url 'product_list' %}">Каталог</a>
+                                <a href="{% url 'help' %}">Помощь</a>
                 {% if user.is_authenticated %}
                     <a href="{% url 'cart' %}">Корзина</a>
                     <a href="{% url 'orders' %}">Мои заказы</a>
@@ -33,8 +34,15 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer">
-        <div class="container">© 2026 TechShop — учебный проект на Django</div>
+       <footer class="footer">
+        <div class="container footer__inner">
+            <span>© 2026 TechShop — учебный проект на Django</span>
+            <nav class="footer__links">
+                <a href="{% url 'help' %}">Помощь</a>
+                <a href="{% url 'delivery' %}">Доставка и оплата</a>
+                <a href="{% url 'contacts' %}">Контакты</a>
+            </nav>
+        </div>
     </footer>
 </body>
 </html>

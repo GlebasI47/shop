@@ -224,3 +224,18 @@ a:hover { text-decoration: underline; }
 }
 .chip:hover { border-color: var(--accent); text-decoration: none; }
 .chip--active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ---------- Информационные страницы ---------- */
+.info { padding: 20px 24px; line-height: 1.6; }
+.info h2 { margin-top: 0; font-size: 19px; }
+.info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.info-grid .panel { margin-bottom: 0; }
+.faq { border-bottom: 1px solid var(--border); padding: 14px 0; }
+.faq:last-child { border-bottom: none; }
+.faq summary { cursor: pointer; font-weight: 600; font-size: 16px; }
+.faq summary:hover { color: var(--accent); }
+.faq p { margin: 10px 0 0; color: #374151; }
+.footer__inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer__links { display: flex; gap: 20px; }
+.footer__links a { color: var(--muted); }
+.footer__links a:hover { color: var(--accent); }
