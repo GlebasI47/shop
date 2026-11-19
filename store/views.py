@@ -7,6 +7,18 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.db import transaction
 from .models import Product, CartItem, Order, OrderItem, Category
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
+
+
+
+SORT_OPTIONS = {
+    "price_asc": ["price"],
+    "price_desc": ["-price"],
+    "new": ["-id"],
+    "name": ["name"],
+    "popular": ["-sold", "name"],
+}
 
 
 def product_list(request):
@@ -21,11 +33,18 @@ def product_list(request):
     if query:
         products = products.filter(name__icontains=query)
 
+    sort = request.GET.get("sort", "")
+    if sort == "popular":
+        products = products.annotate(sold=Coalesce(Sum("orderitem__quantity"), 0))
+    if sort in SORT_OPTIONS:
+        products = products.order_by(*SORT_OPTIONS[sort])
+
     return render(request, "store/product_list.html", {
         "products": products,
         "categories": categories,
         "selected_category": category_id,
         "query": query,
+        "sort": sort,
     })
 
 def product_detail(request, product_id):

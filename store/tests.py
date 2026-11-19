@@ -137,6 +137,21 @@ class CatalogTests(TestCase):
         response = self.client.get(reverse("product_list"), {"category": "abc"})
         self.assertEqual(response.status_code, 200)
 
+    def test_sort_by_price_asc(self):
+        response = self.client.get(reverse("product_list"), {"sort": "price_asc"})
+        names = [product.name for product in response.context["products"]]
+        self.assertEqual(names, ["AirPods", "iPhone"])
+
+    def test_sort_by_popularity(self):
+        user = User.objects.create_user(username="buyer", password="StrongPass123")
+        airpods = Product.objects.get(name="AirPods")
+        order = Order.objects.create(user=user)
+        OrderItem.objects.create(order=order, product=airpods, quantity=3, price=airpods.price)
+
+        response = self.client.get(reverse("product_list"), {"sort": "popular"})
+        names = [product.name for product in response.context["products"]]
+        self.assertEqual(names[0], "AirPods")
+
 
 class InfoPagesTests(TestCase):
     def test_info_pages_open_for_guest(self):

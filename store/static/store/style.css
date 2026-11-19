@@ -344,3 +344,39 @@ a:hover { text-decoration: underline; }
     .row { flex-wrap: wrap; }
     .total { flex-direction: column; gap: 14px; align-items: stretch; }
 }
+
+/* ---------- Фильтры и сортировка ---------- */
+.catalog-head .muted { font-size: 15px; }
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    background: var(--card);
+    padding: 14px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 26px;
+}
+.filters input,
+.filters select {
+    padding: 11px 14px;
+    font-size: 15px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    font-family: inherit;
+}
+.filters input:focus,
+.filters select:focus { outline: none; border-color: var(--accent); }
+.filters__search { flex: 1; min-width: 200px; }
+.filters__price { width: 120px; }
+.filters__sort { cursor: pointer; }
+@media (max-width: 760px) {
+    .filters__search, .filters__sort { width: 100%; }
+    .filters__price { flex: 1; width: auto; }
+    .filters .btn { flex: 1; text-align: center; }
+}
+
+/* При переходе к каталогу (#catalog) не прятать заголовок под липкой шапкой */
+#catalog { scroll-margin-top: 90px; }

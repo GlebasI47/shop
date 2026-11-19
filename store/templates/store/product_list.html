@@ -35,14 +35,27 @@
 
     <div class="catalog-head" id="catalog">
         <h2 class="page-title">Каталог товаров</h2>
-        <form method="get" class="search">
-            <input type="text" name="q" value="{{ query }}" placeholder="Найти товар...">
-            {% if selected_category %}
-                <input type="hidden" name="category" value="{{ selected_category }}">
-            {% endif %}
-            <button type="submit" class="btn">Найти</button>
-        </form>
+        <span class="muted">Найдено: {{ products|length }}</span>
     </div>
+
+    <form method="get" action="#catalog" class="filters">
+        <input type="text" name="q" value="{{ query }}" placeholder="Найти товар..." class="filters__search">
+        <select name="sort" class="filters__sort" onchange="this.form.submit()">
+            <option value="">Сортировка</option>
+            <option value="popular" {% if sort == "popular" %}selected{% endif %}>Сначала популярные</option>
+            <option value="price_asc" {% if sort == "price_asc" %}selected{% endif %}>Сначала дешёвые</option>
+            <option value="price_desc" {% if sort == "price_desc" %}selected{% endif %}>Сначала дорогие</option>
+            <option value="new" {% if sort == "new" %}selected{% endif %}>Сначала новые</option>
+            <option value="name" {% if sort == "name" %}selected{% endif %}>По названию</option>
+        </select>
+        {% if selected_category %}
+            <input type="hidden" name="category" value="{{ selected_category }}">
+        {% endif %}
+        <button type="submit" class="btn">Найти</button>
+        {% if query or sort %}
+            <a href="{% url 'product_list' %}{% if selected_category %}?category={{ selected_category }}{% endif %}" class="btn btn--ghost">Сбросить</a>
+        {% endif %}
+    </form>
 
     <div class="grid">
         {% for product in products %}
