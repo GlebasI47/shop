@@ -5,6 +5,7 @@ from django.test import TestCase
 from .models import Category, Product, CartItem, Order, OrderItem
 
 
+#Unit и Интеграционные
 class ModelTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="buyer", password="StrongPass123")
@@ -90,6 +91,18 @@ class CartAndOrderTests(TestCase):
         self.assertEqual(CartItem.objects.filter(user=self.user).count(), 0)
 
 
+    def test_cart_increase_and_decrease(self):
+        item = CartItem.objects.create(user=self.user, product=self.product, quantity=1)
+
+        self.client.post(reverse("cart_increase", args=[item.id]))
+        item.refresh_from_db()
+        self.assertEqual(item.quantity, 2)
+
+        self.client.post(reverse("cart_decrease", args=[item.id]))
+        self.client.post(reverse("cart_decrease", args=[item.id]))
+        self.assertFalse(CartItem.objects.filter(id=item.id).exists())
+
+
 class RegistrationTests(TestCase):
     def test_weak_password_shows_errors(self):
         response = self.client.post(reverse("register"), {
@@ -100,3 +113,4 @@ class RegistrationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(User.objects.filter(username="newuser").exists())
         self.assertTrue(response.context["form"].errors)
+

@@ -198,3 +198,14 @@ a:hover { text-decoration: underline; }
     .row { flex-wrap: wrap; }
     .total { flex-direction: column; gap: 14px; align-items: stretch; }
 }
+
+/* ---------- Количество в корзине ---------- */
+.qty { display: flex; align-items: center; gap: 10px; }
+.qty form { margin: 0; }
+.qty__btn {
+    width: 32px; height: 32px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: #fff; font-size: 18px; cursor: pointer;
+}
+.qty__btn:hover { border-color: var(--accent); color: var(--accent); }
+.qty__value { min-width: 24px; text-align: center; font-weight: 600; }

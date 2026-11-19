@@ -27,7 +27,7 @@ def register(request):
         form = UserCreationForm()
     return render(request, "registration/register.html", {"form": form})
 
-@login_required
+@login_required     #декоратор
 @require_POST
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -82,3 +82,24 @@ def checkout(request):
 def orders_view(request):
     orders = Order.objects.filter(user=request.user).order_by("-created_at")
     return render(request, "store/orders.html", {"orders": orders})
+
+
+@login_required
+@require_POST
+def cart_increase(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id, user=request.user)
+    item.quantity += 1
+    item.save()
+    return redirect("cart")
+
+
+@login_required
+@require_POST
+def cart_decrease(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id, user=request.user)
+    if item.quantity > 1:
+        item.quantity -= 1
+        item.save()
+    else:
+        item.delete()
+    return redirect("cart")
