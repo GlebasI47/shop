@@ -114,3 +114,25 @@ class RegistrationTests(TestCase):
         self.assertFalse(User.objects.filter(username="newuser").exists())
         self.assertTrue(response.context["form"].errors)
 
+
+class CatalogTests(TestCase):
+    def setUp(self):
+        phones = Category.objects.create(name="Телефоны")
+        headphones = Category.objects.create(name="Наушники")
+        self.phones = phones
+        Product.objects.create(category=phones, name="iPhone", price=Decimal("1000.00"))
+        Product.objects.create(category=headphones, name="AirPods", price=Decimal("400.00"))
+
+    def test_filter_by_category(self):
+        response = self.client.get(reverse("product_list"), {"category": self.phones.id})
+        self.assertContains(response, "iPhone")
+        self.assertNotContains(response, "AirPods")
+
+    def test_search_ignores_case(self):
+        response = self.client.get(reverse("product_list"), {"q": "airpods"})
+        self.assertContains(response, "AirPods")
+        self.assertNotContains(response, "iPhone")
+
+    def test_bad_category_does_not_break_page(self):
+        response = self.client.get(reverse("product_list"), {"category": "abc"})
+        self.assertEqual(response.status_code, 200)

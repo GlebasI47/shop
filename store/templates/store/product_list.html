@@ -4,6 +4,23 @@
 
 {% block content %}
     <h1 class="page-title">Каталог товаров</h1>
+        <form method="get" class="search">
+        <input type="text" name="q" value="{{ query }}" placeholder="Поиск товаров...">
+        {% if selected_category %}
+            <input type="hidden" name="category" value="{{ selected_category }}">
+        {% endif %}
+        <button type="submit" class="btn">Найти</button>
+    </form>
+
+    <div class="chips">
+        <a href="{% url 'product_list' %}" class="chip {% if not selected_category %}chip--active{% endif %}">Все</a>
+        {% for category in categories %}
+            <a href="?category={{ category.id }}"
+               class="chip {% if selected_category == category.id|stringformat:'s' %}chip--active{% endif %}">
+                {{ category.name }}
+            </a>
+        {% endfor %}
+    </div>
     <div class="grid">
         {% for product in products %}
             <article class="card">
@@ -26,7 +43,7 @@
                 </div>
             </article>
         {% empty %}
-            <p class="empty">Товаров пока нет.</p>
+            <p class="empty">Ничего не найдено.</p>
         {% endfor %}
     </div>
 {% endblock %}

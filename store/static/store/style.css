@@ -209,3 +209,18 @@ a:hover { text-decoration: underline; }
 }
 .qty__btn:hover { border-color: var(--accent); color: var(--accent); }
 .qty__value { min-width: 24px; text-align: center; font-weight: 600; }
+
+/* ---------- Поиск и категории ---------- */
+.search { display: flex; gap: 10px; margin-bottom: 16px; }
+.search input {
+    flex: 1; padding: 11px 14px; font-size: 15px;
+    border: 1px solid var(--border); border-radius: 10px;
+}
+.search input:focus { outline: none; border-color: var(--accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.chip {
+    padding: 7px 16px; border-radius: 999px; font-size: 14px;
+    background: var(--card); color: var(--text); border: 1px solid var(--border);
+}
+.chip:hover { border-color: var(--accent); text-decoration: none; }
+.chip--active { background: var(--accent); color: #fff; border-color: var(--accent); }

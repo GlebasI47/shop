@@ -6,11 +6,27 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.db import transaction
+from .models import Product, CartItem, Order, OrderItem, Category
 
 
 def product_list(request):
     products = Product.objects.all()
-    return render(request, "store/product_list.html", {"products": products})
+    categories = Category.objects.all()
+
+    category_id = request.GET.get("category")
+    if category_id and category_id.isdigit():
+        products = products.filter(category_id=category_id)
+
+    query = request.GET.get("q", "")
+    if query:
+        products = products.filter(name__icontains=query)
+
+    return render(request, "store/product_list.html", {
+        "products": products,
+        "categories": categories,
+        "selected_category": category_id,
+        "query": query,
+    })
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
