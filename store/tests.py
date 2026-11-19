@@ -136,3 +136,10 @@ class CatalogTests(TestCase):
     def test_bad_category_does_not_break_page(self):
         response = self.client.get(reverse("product_list"), {"category": "abc"})
         self.assertEqual(response.status_code, 200)
+
+
+class InfoPagesTests(TestCase):
+    def test_info_pages_open_for_guest(self):
+        for name in ["help", "delivery", "contacts"]:
+            response = self.client.get(reverse(name))
+            self.assertEqual(response.status_code, 200)
