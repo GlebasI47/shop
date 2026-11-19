@@ -3,24 +3,47 @@
 {% block title %}Каталог{% endblock %}
 
 {% block content %}
-    <h1 class="page-title">Каталог товаров</h1>
-        <form method="get" class="search">
-        <input type="text" name="q" value="{{ query }}" placeholder="Поиск товаров...">
-        {% if selected_category %}
-            <input type="hidden" name="category" value="{{ selected_category }}">
-        {% endif %}
-        <button type="submit" class="btn">Найти</button>
-    </form>
+    {% if not query and not selected_category %}
+        <section class="hero">
+            <div class="hero__text">
+                <span class="hero__label">Новый сезон техники</span>
+                <h1 class="hero__title">Техника, которая<br>радует каждый день</h1>
+                <p class="hero__subtitle">Смартфоны, ноутбуки и наушники от популярных брендов. Оформление заказа — за минуту.</p>
+                <a href="#catalog" class="btn btn--big btn--white">Смотреть каталог</a>
+            </div>
+            <div class="hero__icons" aria-hidden="true">
+                <span>📱</span><span>💻</span><span>🎧</span>
+            </div>
+        </section>
+    {% endif %}
 
-    <div class="chips">
-        <a href="{% url 'product_list' %}" class="chip {% if not selected_category %}chip--active{% endif %}">Все</a>
+    <section class="tiles">
+        <a href="{% url 'product_list' %}" class="tile {% if not selected_category %}tile--active{% endif %}">
+            <span class="tile__icon">🛍️</span>
+            <span class="tile__name">Все товары</span>
+        </a>
         {% for category in categories %}
             <a href="?category={{ category.id }}"
-               class="chip {% if selected_category == category.id|stringformat:'s' %}chip--active{% endif %}">
-                {{ category.name }}
+               class="tile {% if selected_category == category.id|stringformat:'s' %}tile--active{% endif %}">
+                <span class="tile__icon">
+                    {% if "елефон" in category.name or "мартфон" in category.name %}📱{% elif "оутбук" in category.name %}💻{% elif "аушник" in category.name %}🎧{% else %}📦{% endif %}
+                </span>
+                <span class="tile__name">{{ category.name }}</span>
             </a>
         {% endfor %}
+    </section>
+
+    <div class="catalog-head" id="catalog">
+        <h2 class="page-title">Каталог товаров</h2>
+        <form method="get" class="search">
+            <input type="text" name="q" value="{{ query }}" placeholder="Найти товар...">
+            {% if selected_category %}
+                <input type="hidden" name="category" value="{{ selected_category }}">
+            {% endif %}
+            <button type="submit" class="btn">Найти</button>
+        </form>
     </div>
+
     <div class="grid">
         {% for product in products %}
             <article class="card">
@@ -33,9 +56,9 @@
                 </a>
                 <div class="card__body">
                     <span class="badge">{{ product.category.name }}</span>
-                    <h2 class="card__title">
+                    <h3 class="card__title">
                         <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
-                    </h2>
+                    </h3>
                     <div class="card__footer">
                         <span class="price">{{ product.price }} руб.</span>
                         <a href="{% url 'product_detail' product.id %}" class="btn btn--small">Подробнее</a>
@@ -43,7 +66,7 @@
                 </div>
             </article>
         {% empty %}
-            <p class="empty">Ничего не найдено.</p>
+            <p class="empty">Ничего не найдено. <a href="{% url 'product_list' %}">Показать все товары</a></p>
         {% endfor %}
     </div>
 {% endblock %}
