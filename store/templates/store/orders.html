@@ -4,6 +4,11 @@
 
 {% block content %}
     <h1 class="page-title">Мои заказы</h1>
+    {% if orders %}
+        <p class="notice">
+            Чтобы отменить заказ, <a href="{% url 'contacts' %}">свяжитесь с нами</a> и укажите номер заказа.
+        </p>
+    {% endif %}
     {% for order in orders %}
         <div class="panel order">
             <div class="order__head">
