@@ -102,6 +102,11 @@ class CartAndOrderTests(TestCase):
         self.client.post(reverse("cart_decrease", args=[item.id]))
         self.assertFalse(CartItem.objects.filter(id=item.id).exists())
 
+    def test_add_to_cart_shows_message(self):
+        url = reverse("add_to_cart", args=[self.product.id])
+        response = self.client.post(url, follow=True)
+        self.assertContains(response, "добавлен в корзину")
+
 
 class RegistrationTests(TestCase):
     def test_weak_password_shows_errors(self):

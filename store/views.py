@@ -9,7 +9,7 @@ from django.db import transaction
 from .models import Product, CartItem, Order, OrderItem, Category
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
-
+from django.contrib import messages
 
 
 SORT_OPTIONS = {
@@ -70,6 +70,7 @@ def add_to_cart(request, product_id):
     if not created:
         item.quantity += 1
         item.save()
+    messages.success(request, f"«{product.name}» добавлен в корзину")
     return redirect("product_detail", product_id=product.id)
 
 @login_required
@@ -84,6 +85,7 @@ def cart_view(request):
 @require_POST
 def remove_from_cart(request, item_id):
     item = get_object_or_404(CartItem, id=item_id, user=request.user)
+    messages.success(request, f"«{item.product.name}» удалён из корзины")
     item.delete()
     return redirect("cart")
 
@@ -110,6 +112,7 @@ def checkout(request):
         order.total = total
         order.save()
         items.delete()
+    messages.success(request, f"Заказ №{order.id} оформлен! Спасибо за покупку.")
 
     return redirect("orders")
 
